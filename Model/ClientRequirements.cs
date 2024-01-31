@@ -8,25 +8,30 @@ namespace CustomerRelationshipManagementBackend.Model
         [Key]
         public int ClientRequirementsId { get; set; }
 
+        [Required(ErrorMessage = "Client Requirements Name is required")]
         public string ClientRequirementsName { get; set; }
 
-        public decimal ClientRequirementsPrice { get; set;}
+        [Required(ErrorMessage = "Client Requirements Price is required")]
+        public decimal ClientRequirementsPrice { get; set; }
 
+        [Required(ErrorMessage = "Project ID is required")]
         public int ProjectId { get; set; }
 
         [ForeignKey(nameof(ProjectId))]
-        public Projects projects { get; set; }
+        public Projects Project { get; set; }
 
-        public int Qunatity { get; set; }
+        [Required(ErrorMessage = "Quantity is required")]
+        public int Quantity { get; set; }
 
-        public decimal TotalPrice { get;set;}
+        [Required(ErrorMessage = "Total Price is required")]
+        public decimal TotalPrice { get; set; }
 
         public DateTime CreatedDateTime { get; set; }
 
         public DateTime UpdatedDateTime { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Is Enabled is required")]
         [Display(Name = "Is Enabled")]
-        public Boolean IsEnabled { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }
