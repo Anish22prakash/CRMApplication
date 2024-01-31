@@ -3,28 +3,29 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CustomerRelationshipManagementBackend.Model
 {
-    public class Suppliers
+    public class CompanyEmployee
     {
-        public int SuppliesId { get; set; }
+        [Key]
+        public int EmployeeID { get; set;}
 
-        public string SupplierName { get; set;}
+        public string EmployeeName { get; set;}
 
-        public string SupplierEmail { get; set; }
+        public string EmployeeAddress { get; set;}
 
-        public string SupplierMobile { get; set; }
+        public string EmployeeEmail { get; set;}
 
-        public string? SupplierAddress { get; set; }
+        public string EmployeePhone { get; set;}
 
-        public string? SupplierCompanyName { get; set; }
+        public string EmployeeDepartment { get; set;}
 
-        public string? SupplierCompanyAddress { get; set; }
+        public string EmployeePosition { get; set;}
+
+        public decimal EmployeeSalary { get; set;}
 
         public int UserID { get; set; }
 
         [ForeignKey(nameof(UserID))]
         public Users users { get; set; }
-
-        public ICollection<Products>? products { get; set; }
 
         public DateTime CreatedDateTime { get; set; }
 
@@ -33,5 +34,6 @@ namespace CustomerRelationshipManagementBackend.Model
         [Required]
         [Display(Name = "Is Enabled")]
         public Boolean IsEnabled { get; set; }
+
     }
 }

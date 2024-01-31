@@ -3,28 +3,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CustomerRelationshipManagementBackend.Model
 {
-    public class Suppliers
+    public class CompanyUltity
     {
-        public int SuppliesId { get; set; }
+        [Key]
+        public int CompanyUltityId { get; set; }
 
-        public string SupplierName { get; set;}
+        public string UltityName { get; set; }
 
-        public string SupplierEmail { get; set; }
+        public decimal UltityPrice { get; set; }
 
-        public string SupplierMobile { get; set; }
-
-        public string? SupplierAddress { get; set; }
-
-        public string? SupplierCompanyName { get; set; }
-
-        public string? SupplierCompanyAddress { get; set; }
+        public string UltityDescription { get; set; }
 
         public int UserID { get; set; }
 
         [ForeignKey(nameof(UserID))]
         public Users users { get; set; }
-
-        public ICollection<Products>? products { get; set; }
 
         public DateTime CreatedDateTime { get; set; }
 
