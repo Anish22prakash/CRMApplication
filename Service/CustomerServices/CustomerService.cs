@@ -1,6 +1,6 @@
 ﻿namespace CustomerRelationshipManagementBackend.Service.CustomerServices
 {
-    public class CustomerService
+    public class CustomerService :ICustomerService
     {
     }
 }
