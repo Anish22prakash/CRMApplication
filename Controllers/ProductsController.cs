@@ -83,5 +83,51 @@ namespace CustomerRelationshipManagementBackend.Controllers
                 return BadRequest(new { success = false, statusCode = 400, error = "Invalid input", details = ex.Message });
             }
         }
+
+        [HttpPut, Route("UpdateProduct")]
+        [Consumes("multipart/form-data")]
+        [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
+        public async Task<IActionResult> UpdateProduct([FromForm] UpdateProductDto productDto)
+        {
+            if (productDto.ProductId.HasValue && productDto.ProductId > 0)
+            {
+                var data = await _productService.UpdateProductAsync(productDto);
+                if (data != null)
+                {
+                    return Ok(new { success = true, statusCode = 200, data = data });
+                }
+                else
+                {
+                    return Ok(new { success = false, statusCode = 400, error = "Failed to update product" });
+                }
+            }
+            else
+            {
+                return BadRequest(new { success = false, statusCode = 400, error = "Invalid product ID" });
+            }
+        }
+
+        [HttpDelete, Route("DeleteProduct")]
+        public async Task<IActionResult> DeleteProduct(int productId)
+        {
+            if (productId > 0)
+            {
+                var result = await _productService.DeleteProductAsync(productId);
+                if (result != null)
+                {
+                    return Ok(new { success = true, statusCode = 200, message = result });
+                }
+                else
+                {
+                    return Ok(new { success = false, statusCode = 400, error = "Failed to delete product" });
+                }
+            }
+            else
+            {
+                return BadRequest(new { success = false, statusCode = 400, error = "Invalid product ID" });
+            }
+        }
+
+
     }
 }

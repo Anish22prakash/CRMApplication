@@ -12,6 +12,7 @@ namespace CustomerRelationshipManagementBackend.Helper
             CreateMap<Suppliers, AddSupplierDto>().ReverseMap();
             CreateMap<TasksScheduler , AddTaskSchedulerDto>().ReverseMap();
             CreateMap<Products , AddProductDto>().ReverseMap();
+            CreateMap<Products, UpdateProductDto>().ReverseMap();
         }
     }
 }
