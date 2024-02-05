@@ -76,7 +76,7 @@ namespace CustomerRelationshipManagementBackend.Controllers
                 }
                 else
                 {
-                    return Ok(new { success = false, statusCode = 400, error = "not users found" });
+                    return Ok(new { success = false, statusCode = 400, error = "users not found" });
                 }
             }
             catch (Exception ex)
