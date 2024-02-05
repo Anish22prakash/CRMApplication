@@ -14,7 +14,7 @@ namespace CustomerRelationshipManagementBackend.ModelDto
 
         [Required(ErrorMessage = "Supplier Email is required")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        public string SupplierEmail { get; set; }
+        public string? SupplierEmail { get; set; }
 
         [Required(ErrorMessage = "Supplier Mobile is required")]
         public string SupplierMobile { get; set; }

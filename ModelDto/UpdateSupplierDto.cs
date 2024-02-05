@@ -7,15 +7,11 @@ namespace CustomerRelationshipManagementBackend.ModelDto
         [Required(ErrorMessage = "SuppliesId is required")]
         public int SuppliesId { get; set; }
 
-        [Required(ErrorMessage = "Supplier Name is required")]
-        public string SupplierName { get; set; }
+        public string? SupplierName { get; set; }
 
-        [Required(ErrorMessage = "Supplier Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        public string SupplierEmail { get; set; }
+        public string? SupplierMobile { get; set; }
 
-        [Required(ErrorMessage = "Supplier Mobile is required")]
-        public string SupplierMobile { get; set; }
+        public string? SupplierEmail { get; set; }
 
         public string? SupplierAddress { get; set; }
 

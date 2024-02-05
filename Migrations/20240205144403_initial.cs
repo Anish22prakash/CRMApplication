@@ -172,7 +172,7 @@ namespace CustomerRelationshipManagementBackend.Migrations
                     SuppliesId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SupplierName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SupplierEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SupplierEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SupplierMobile = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SupplierAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SupplierCompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),

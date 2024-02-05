@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CustomerRelationshipManagementBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240205071816_initial")]
+    [Migration("20240205144403_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -473,7 +473,6 @@ namespace CustomerRelationshipManagementBackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupplierEmail")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupplierMobile")

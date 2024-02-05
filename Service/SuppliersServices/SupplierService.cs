@@ -178,7 +178,7 @@ namespace CustomerRelationshipManagementBackend.Service.SuppliersServices
 
                     if (existingSupplier != null)
                     {
-                        // 2. Map data from UpdateSupplierDto to existing supplier using AutoMapper
+                        // 2. Update only non-null properties from UpdateSupplierDto to existing supplier using AutoMapper
                         _mapper.Map(updatesupplierDto, existingSupplier);
 
                         // 3. Set the updated DateTime
