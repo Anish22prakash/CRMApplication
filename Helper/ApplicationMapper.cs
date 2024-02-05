@@ -9,7 +9,9 @@ namespace CustomerRelationshipManagementBackend.Helper
         public ApplicationMapper() 
         {
             CreateMap<Users, UserRegisterDto>().ReverseMap();
+            CreateMap<Users, UpdateuserDto>().ReverseMap();
             CreateMap<Suppliers, AddSupplierDto>().ReverseMap();
+            CreateMap<Suppliers, UpdateSupplierDto>().ReverseMap();
             CreateMap<TasksScheduler , AddTaskSchedulerDto>().ReverseMap();
         }
     }

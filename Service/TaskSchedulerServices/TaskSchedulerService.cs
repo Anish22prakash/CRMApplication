@@ -108,9 +108,30 @@ namespace CustomerRelationshipManagementBackend.Service.TaskSchedulerServices
             }
         }
 
-        public Task<string> RemoveTaskById(int taskId)
+        public async Task<string> RemoveTaskById(int taskId)
         {
-            throw new NotImplementedException();
+            string message = MessagesAlerts.FailDelete;
+            try
+            {
+                var existingTask = await _context.TasksScheduler.FirstOrDefaultAsync(u => u.SchedulerId == taskId);
+                if (existingTask == null)
+                {
+                    _logger.LogInformation($"Task not found by ID {taskId}");
+                    return null;
+                }
+
+                _context.TasksScheduler.Remove(existingTask);
+                await _context.SaveChangesAsync();
+                message = MessagesAlerts.SuccessfullDelete;
+                _logger.LogInformation($"Task with ID {taskId} deleted successfully");
+                return message;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(default(EventId), ex, "RemoveTaskById");
+                throw;
+            }
         }
+
     }
 }

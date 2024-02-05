@@ -164,9 +164,74 @@ namespace CustomerRelationshipManagementBackend.Service.UserServices
             }
         }
 
-        public Task<Users> UpdateUsersAsync()
+        public async Task<Users> UpdateUsersAsync(UpdateuserDto userDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // Fetch the user from the database based on userDto.UserID
+                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.UserID == userDto.UserID);
+
+                if (existingUser == null)
+                {
+                    _logger.LogInformation("User not found");
+                    return null;
+                }
+
+                // Check each property and update only if not null
+                if (userDto.FirstName != null)
+                {
+                    existingUser.FirstName = userDto.FirstName;
+                }
+
+                if (userDto.LastName != null)
+                {
+                    existingUser.LastName = userDto.LastName;
+                }
+
+                if (userDto.UserCompanyName != null)
+                {
+                    existingUser.UserCompanyName = userDto.UserCompanyName;
+                }
+
+                if (userDto.UserEmail != null)
+                {
+                    existingUser.UserEmail = userDto.UserEmail;
+                }
+
+                if (userDto.UserMobile != null)
+                {
+                    existingUser.UserMobile = userDto.UserMobile;
+                }
+
+                if (userDto.UserAddress != null)
+                {
+                    existingUser.UserAddress = userDto.UserAddress;
+                }
+
+                if (userDto.UserCompanyAddress != null)
+                {
+                    existingUser.UserCompanyAddress = userDto.UserCompanyAddress;
+                }
+
+                if (userDto.ProfilePicUrl != null)
+                {
+                    existingUser.ProfilePicUrl = userDto.ProfilePicUrl;
+                }
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User updated successfully");
+
+                // Return the updated user
+                return existingUser;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(default(EventId), ex, "UpdateUsersAsync");
+                throw;
+            }
         }
+
     }
 }

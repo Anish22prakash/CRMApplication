@@ -82,6 +82,67 @@ namespace CustomerRelationshipManagementBackend.Controllers
             }
         }
 
+        [HttpPut, Route("UpdateSupplier")]
+        public async Task<IActionResult> UpdateSupplier(UpdateSupplierDto supplierDto)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(supplierDto.SupplierName) || !string.IsNullOrWhiteSpace(supplierDto.SupplierMobile))
+                {
+                    var updatedSupplier = await _supplierService.UpdateSuppliers(supplierDto);
+
+                    if (updatedSupplier != null)
+                    {
+                        return Ok(new { success = true, statusCode = 200, data = updatedSupplier });
+                    }
+                    else
+                    {
+                        return Ok(new { success = false, statusCode = 400, error = "Failed to update supplier. Supplier not found." });
+                    }
+                }
+                else
+                {
+                    return BadRequest(new { success = false, statusCode = 400, error = "Supplier name or mobile is not valid" });
+                }
+            }
+            catch (Exception ex)
+            {
+              
+                return StatusCode(500, new { success = false, statusCode = 500, error = "Internal Server Error" });
+            }
+        }
+
+        [HttpDelete, Route("DeleteSupplier/{supplierId}/{userId}")]
+        public async Task<IActionResult> DeleteSupplier(int supplierId, int userId)
+        {
+            try
+            {
+                var deletionMessage = await _supplierService.DeleteSuppliers(supplierId, userId);
+
+                return Ok(new { success = true, statusCode = 200, message = deletionMessage });
+            }
+            catch (Exception ex)
+            {
+               
+                return StatusCode(500, new { success = false, statusCode = 500, error = "Internal Server Error" });
+            }
+        }
+
+        [HttpDelete, Route("DisableSupplier/{supplierId}/{userId}")]
+        public async Task<IActionResult> DisableSupplier(int supplierId, int userId)
+        {
+            try
+            {
+                var deletionMessage = await _supplierService.DisabledSuppliers(supplierId, userId);
+
+                return Ok(new { success = true, statusCode = 200, message = deletionMessage });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, new { success = false, statusCode = 500, error = "Internal Server Error" });
+            }
+        }
 
     }
 }

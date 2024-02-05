@@ -47,15 +47,68 @@ namespace CustomerRelationshipManagementBackend.Service.SuppliersServices
             }
         }
 
-        public Task<string> DeleteSuppliers(int supplierId, int userId)
+        public async Task<string> DeleteSuppliers(int supplierId, int userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existingSupplier = await _context.Suppliers.FindAsync(supplierId);
+
+                if (existingSupplier != null && existingSupplier.UserID == userId)
+                {
+                    _context.Suppliers.Remove(existingSupplier);
+                    await _context.SaveChangesAsync();
+
+                    _logger.LogInformation("Supplier deleted successfully");
+
+                    return "Supplier deleted successfully";
+                }
+                else
+                {
+                    _logger.LogInformation("Supplier not found or user does not have permission to delete");
+                    return "Supplier not found or user does not have permission to delete";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(default(EventId), ex, "DeleteSuppliers");
+                throw;
+            }
         }
 
-        public Task<string> DiabledSuppliers(int supplierId, int userId)
+
+        
+
+        public async Task<string> DisabledSuppliers(int supplierId, int userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existingSupplier = await _context.Suppliers.FindAsync(supplierId);
+
+                if (existingSupplier != null && existingSupplier.UserID == userId)
+                {
+                    // Soft delete: Set IsEnabled to false
+                    existingSupplier.IsEnabled = false;
+                    existingSupplier.UpdatedDateTime = DateTime.Now;
+
+                    await _context.SaveChangesAsync();
+
+                    _logger.LogInformation("Supplier disabled successfully");
+
+                    return "Supplier disabled successfully";
+                }
+                else
+                {
+                    _logger.LogInformation("Supplier not found or user does not have permission to delete");
+                    return "Supplier not found or user does not have permission to delete";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(default(EventId), ex, "DisabledSuppliers");
+                throw;
+            }
         }
+
 
         public async Task<IList<Suppliers>> GetAllSuppliersAsync(int page, int pageSize, string? search, int userId)
         {
@@ -114,9 +167,55 @@ namespace CustomerRelationshipManagementBackend.Service.SuppliersServices
             }
         }
 
-        public Task<Suppliers> UpdateSuppliers(AddSupplierDto supplier)
+        public async Task<Suppliers?> UpdateSuppliers(UpdateSupplierDto updatesupplierDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (updatesupplierDto != null)
+                {
+                    // 1. Get the existing supplier from the database
+                    var existingSupplier = await _context.Suppliers.FindAsync(updatesupplierDto.SuppliesId);
+
+                    if (existingSupplier != null)
+                    {
+                        // 2. Map data from UpdateSupplierDto to existing supplier using AutoMapper
+                        _mapper.Map(updatesupplierDto, existingSupplier);
+
+                        // 3. Set the updated DateTime
+                        existingSupplier.UpdatedDateTime = DateTime.Now;
+
+                        // 4. Save changes to the database
+                        await _context.SaveChangesAsync();
+
+                        // 5. Log success information
+                        _logger.LogInformation("Supplier updated successfully");
+
+                        // 6. Return the updated supplier
+                        return existingSupplier;
+                    }
+                    else
+                    {
+                        // 7. Log a message if the supplier with the specified SuppliesId is not found
+                        _logger.LogInformation("Supplier not found for update");
+                        return null;
+                    }
+                }
+
+                // 8. Log a message if supplierDto is null
+                _logger.LogInformation("Not able to update supplier as supplierDto is null");
+
+                // 9. Return null if supplierDto is null
+                return null;
+            }
+            catch (Exception ex)
+            {
+                // 10. Log an error if an exception occurs
+                _logger.LogError(default(EventId), ex, "UpdateSuppliers");
+
+                // 11. Re-throw the exception
+                throw;
+            }
         }
+
     }
 }

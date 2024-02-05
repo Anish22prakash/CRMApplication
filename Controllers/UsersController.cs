@@ -105,5 +105,39 @@ namespace CustomerRelationshipManagementBackend.Controllers
                 return BadRequest(new { success = false, statusCode = 400, error = "userId not valid" });
             }
         }
+
+        [HttpPost, Route("UpdateUser")]
+        [Consumes("multipart/form-data")]
+        [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
+        public async Task<IActionResult> UpdateUser([FromForm] UpdateuserDto userDto)
+        {
+            try
+            {
+                // Check if user ID is valid
+                if (userDto.UserID.HasValue && userDto.UserID > 0)
+                {
+                    // Your logic to update the user
+                    var updatedUser = await _userService.UpdateUsersAsync(userDto);
+
+                    if (updatedUser != null)
+                    {
+                        return Ok(new { success = true, statusCode = 200, data = updatedUser });
+                    }
+                    else
+                    {
+                        return Ok(new { success = false, statusCode = 400, error = "Failed to update user" });
+                    }
+                }
+                else
+                {
+                    return BadRequest(new { success = false, statusCode = 400, error = "Invalid user ID" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, statusCode = 400, error = "Invalid input", details = ex.Message });
+            }
+        }
+
     }
 }
