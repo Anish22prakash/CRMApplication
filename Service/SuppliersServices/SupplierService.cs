@@ -15,6 +15,7 @@ namespace CustomerRelationshipManagementBackend.Service.SuppliersServices
         private readonly ILogger<SupplierService> _logger;
         private readonly IUserService _userService;
 
+
         public SupplierService(ApplicationDbContext context, IMapper mapper, ILogger<SupplierService> logger, IUserService userService)
         {
             _context = context;
