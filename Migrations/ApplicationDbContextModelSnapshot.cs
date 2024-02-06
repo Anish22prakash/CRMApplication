@@ -471,7 +471,6 @@ namespace CustomerRelationshipManagementBackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupplierEmail")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupplierMobile")

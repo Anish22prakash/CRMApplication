@@ -9,6 +9,6 @@ namespace CustomerRelationshipManagementBackend.Service.UserServices
         public Task<Users> loginUserAsync(UserLoginDto user);
         public Task<Users> GetUserAsync(int userId);
         public Task<IList<Users>> GetAllUserByFilter(int page, int pageSize, string? search);
-        public Task<Users> UpdateUsersAsync();
+        public Task<Users> UpdateUsersAsync(UpdateuserDto userUpdateDto);
     }
 }

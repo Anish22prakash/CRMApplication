@@ -79,5 +79,28 @@ namespace CustomerRelationshipManagementBackend.Controllers
                 return BadRequest(new { success = false, statusCode = 400, error = "Invalid input", details = ex.Message });
             }
         }
+
+        [HttpDelete, Route("RemoveTask")]
+        public async Task<IActionResult> RemoveTask(int taskId)
+        {
+            try
+            {
+                var result = await _tSchedulerService.RemoveTaskById(taskId);
+
+                if (result != null)
+                {
+                    return Ok(new { success = true, statusCode = 200, message = result });
+                }
+                else
+                {
+                    return Ok(new { success = false, statusCode = 400, error = "Task not found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, statusCode = 400, error = "Invalid input", details = ex.Message });
+            }
+        }
+
     }
 }
