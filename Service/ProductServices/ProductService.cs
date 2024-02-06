@@ -27,10 +27,7 @@ namespace CustomerRelationshipManagementBackend.Service.ProductServices
             _environment = environment;
         }
 
-        public Task<string> DeleteProductAsync()
-        {
-            throw new NotImplementedException();
-        }
+     
 
         public async Task<IList<object>> GetAllProducts(int userId ,int page , int pageSize , string search)
         {
@@ -148,9 +145,97 @@ namespace CustomerRelationshipManagementBackend.Service.ProductServices
             }
         }
 
-        public Task<AddProductDto> UpdateProductAsync()
+        public async Task<UpdateProductDto> UpdateProductAsync(UpdateProductDto productDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existingProduct = await _context.Products
+                    .FirstOrDefaultAsync(p => p.ProductId == productDto.ProductId);
+
+                if (existingProduct == null)
+                {
+                    _logger.LogInformation("Product not found");
+                    return null;
+                }
+
+                // Update only the specified fields
+                existingProduct.ProductName = productDto.ProductName ?? existingProduct.ProductName;
+                existingProduct.ProductDescription = productDto.ProductDescription ?? existingProduct.ProductDescription;
+                existingProduct.Quantity = productDto.Quantity ?? existingProduct.Quantity;
+                existingProduct.ProductPrice = productDto.ProductPrice ?? existingProduct.ProductPrice;
+
+                if (productDto.ProductImage != null)
+                {
+                    // Update image logic here
+                    string ProductImgfolder = "Product";
+
+                    ProductImgfolder += Guid.NewGuid().ToString().Substring(0, 5);
+
+                    string serverFilePath = Path.Combine(_environment.ContentRootPath, "CRMImages", ProductImgfolder);
+                    if (!Directory.Exists(Path.GetDirectoryName(serverFilePath)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(serverFilePath));
+                    }
+
+                    // Remove the old image file if it exists
+                    if (!string.IsNullOrEmpty(existingProduct.ProductPicUrl))
+                    {
+                        string oldImagePath = Path.Combine(_environment.ContentRootPath, existingProduct.ProductPicUrl.TrimStart('/'));
+                        if (File.Exists(oldImagePath))
+                        {
+                            File.Delete(oldImagePath);
+                        }
+                    }
+
+                    // Save the new image
+                    using (var stream = new FileStream(serverFilePath, FileMode.Create))
+                    {
+                        productDto.ProductImage.CopyTo(stream);
+                    }
+
+                    existingProduct.ProductPicUrl = $"/CRMImages/{ProductImgfolder}";
+                }
+
+                existingProduct.UpdatedDateTime = DateTime.Now;
+                _context.Update(existingProduct);
+                await _context.SaveChangesAsync();
+
+                var updatedProductDto = _mapper.Map<Products, UpdateProductDto>(existingProduct);
+                return updatedProductDto;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(default(EventId), ex, "UpdateProductAsync");
+                throw;
+            }
+        }
+        public async Task<string> DeleteProductAsync(int productId)
+        {
+            try
+            {
+                var existingProduct = await _context.Products
+                    .FirstOrDefaultAsync(p => p.ProductId == productId);
+
+                if (existingProduct == null)
+                {
+                    _logger.LogInformation("Product not found");
+                    return null;
+                }
+
+                // Remove the product
+                _context.Products.Remove(existingProduct);
+
+                // Save changes
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation($"Product deleted successfully: {productId}");
+                return "Product deleted successfully";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(default(EventId), ex, "DeleteProductAsync");
+                throw;
+            }
         }
     }
 }
